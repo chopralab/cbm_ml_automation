@@ -14,7 +14,9 @@ relative_cutoff = 2 # relative cutoff using . default has been set to 2
 elem_comp = ""
 rdbe = 2
 
-expert_based_dict = {}
+expert_based_dict = {73.04: ['epoxide','sulfone','sulfoxide', 'amide', 'alcohol', 'aldehyde', 'ether', 'ketone', 'ester', 'carboxylic acid'],
+                     59.03: ['epoxide', 'sulfone'],
+                     105.07: ['sulfone']} #TMB func.s added
 ml_based_dict = {}
 
 
