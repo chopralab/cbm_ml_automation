@@ -14,9 +14,12 @@ relative_cutoff = 2 # relative cutoff using . default has been set to 2
 elem_comp = ""
 rdbe = 2
 
-expert_based_dict = {73.04: ['epoxide','sulfone','sulfoxide', 'amide', 'alcohol', 'aldehyde', 'ether', 'ketone', 'ester', 'carboxylic acid'],
-                     59.03: ['epoxide', 'sulfone'],
-                     105.07: ['sulfone']} #TMB func.s added
+expert_based_dict = {73.04: ['epoxide','sulfone','sulfoxide', 'amide', 'alcohol', 'aldehyde', 'ether', 'ketone', 'ester', 'carboxylic acid'], #TMB adduct-MeOH
+                     59.03: ['epoxide', 'sulfone'], #TMB adduct-Me2O
+                     105.07: ['sulfone'], #TMB adduct
+                     72.06: ['sulfoxide', 'N,N-disubstituted_hydroxylamine', 'aromatic_tertiary_N-oxide'], #MOP adduct
+                     52.04: ['N-oxide_with_nearby_COOH/OH/NH2', 'sulfoxide_with_nearby_COOH/OH/NH2'], #TDMAB adduct-2DMA
+                     98.10: ['N-oxide', 'sulfoxide', 'urea', 'pyridine', 'imine']} #TDMAB adduct-DMA
 ml_based_dict = {}
 
 
@@ -50,19 +53,30 @@ def find_elements(string):
     hetero_elements = element_lists(hetero_string)
     return hetero_elements
 
+"""Selecting Relatives higher than or equal to a predefined cutoff. Defaults has been set to 2.
+Then branching ratios are being calculated for the remaining peaks other than the analyte peak"""
 def br_calculation(df, analyte, cutoff):
-    df_selected = df.loc[df['Relative'] >= relative_cutoff]
-    df_dropped = df_selected.loc[df['m/z'] != analyte]
+    df_selected = df.loc[df['Relative'] >= relative_cutoff] # select the peaks above a certain relative intensity cutoff
+    df_dropped = df_selected.loc[df['m/z'] != analyte] # protonated analyte dropped!
     sum_relative = sum(df_dropped['Relative'])
-    df_dropped['Branching_ratios']= (df_dropped['Relative']/sum_relative)*100
+    df_dropped['Branching_ratios']= (df_dropped['Relative']/sum_relative)*100 #BR calculation
     return df_dropped
 
 def mass_difference(df, analyte):
     df['mass_difference'] = abs(df['m/z'] - analyte)
     return df
 
-def expert_based(df, nr, dictionary):  
-    return None
+def expert_based(df, nr, dictionary):
+    funcs = []
+    for i in df['mass_difference']:
+        for key in dictionary.keys():
+            if i >= key-0.6 and i <= key+0.6:
+#                print(dictionary[key])
+                funcs.append(dictionary[key])
+            else:
+                continue
+            
+    return funcs
 
 def ml_based(df, ):
     return None
@@ -73,4 +87,10 @@ result_df = br_calculation(df, analyte_mz, relative_cutoff)
 #print(result_df)
 
 result_df2 = mass_difference(result_df, analyte_mz)
-print(result_df2)
+
+expert_based_funcs = expert_based(result_df2, 'None', expert_based_dict)
+
+print(*expert_based_funcs)
+
+
+    
