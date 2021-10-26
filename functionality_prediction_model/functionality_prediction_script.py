@@ -78,7 +78,8 @@ def expert_based(df, nr, dictionary):
             
     return funcs
 
-def ml_based(df, ):
+def ml_based(df, nr, dictionary):
+    
     return None
 
 
