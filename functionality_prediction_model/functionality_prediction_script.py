@@ -104,6 +104,19 @@ def expert_based(df, nr, dictionary):
             
     return funcs
 
+def func_sieve_expert(elements_lst_of_lst, predicted_func_list, func_and_elements_dict):
+    lst_of_lst = elements_lst_of_lst
+    elements = lst_of_lst[0]
+    numbers = lst_of_lst[1]
+    prob_funcs = []
+    for i in predicted_func_list:
+        if(set(func_and_elements_dict[i]).issubset(set(elements))) and numbers[elements.index('O')] > 0 or  (set(elements).issubset(set(func_and_elements_dict[i]))) and numbers[elements.index('O')] > 0:
+            prob_funcs.append(i)
+        else:
+            continue
+        
+    return prob_funcs
+
 def ml_based(df, nr, dictionary):
     
     return None
@@ -122,20 +135,6 @@ elements_list_of_list = find_elements(elem_comp)
 #print(expert_based_funcs)
 #print(funcs_n_elemental_comps)
 #print(elements_list_of_list)
-
-
-def func_sieve_expert(elements_lst_of_lst, predicted_func_list, func_and_elements_dict):
-    lst_of_lst = elements_lst_of_lst
-    elements = lst_of_lst[0]
-    numbers = lst_of_lst[1]
-    prob_funcs = []
-    for i in predicted_func_list:
-        if(set(func_and_elements_dict[i]).issubset(set(elements))) and numbers[elements.index('O')] > 0 or  (set(elements).issubset(set(func_and_elements_dict[i]))) and numbers[elements.index('O')] > 0:
-            prob_funcs.append(i)
-        else:
-            continue
-        
-    return prob_funcs
 
 print(func_sieve_expert(elements_list_of_list,expert_based_funcs,funcs_n_elemental_comps))
 
