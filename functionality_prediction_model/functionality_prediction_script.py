@@ -12,45 +12,47 @@ from PIL import Image
 
 """reading csv files"""
 #df = pd.read_csv("ion-molecule_reaction_data/diphenyl_sulfoxide_mop_nominal.txt", skiprows = 8, sep = "\t") # diphenyl_sulfoxide
-df = pd.read_csv("ion-molecule_reaction_data/diphenyl_sulfoxide_tmb_nominal.txt", skiprows = 8, sep = "\t") # diphenyl_sulfoxide
+#df = pd.read_csv("ion-molecule_reaction_data/diphenyl_sulfoxide_tmb_nominal.txt", skiprows = 8, sep = "\t") # diphenyl_sulfoxide
 #df = pd.read_csv("ion-molecule_reaction_data/diphenyl_sulfoxide_tdmab_nominal.txt", skiprows = 8, sep = "\t") # diphenyl_sulfoxide
 
 #df = pd.read_csv("ion-molecule_reaction_data/methyl_phenyl_sulfone_tmb_nominal.txt", skiprows = 8, sep = "\t") # methyl_phenyl_sulfone
 #df = pd.read_csv("ion-molecule_reaction_data/methyl_phenyl_sulfone_mop_nominal.txt", skiprows = 8, sep = "\t") # methyl_phenyl_sulfone
 #df = pd.read_csv("ion-molecule_reaction_data/methyl_phenyl_sulfone_tdmab_nominal.txt", skiprows = 8, sep = "\t") # methyl_phenyl_sulfone
 #
-#df = pd.read_csv("ion-molecule_reaction_data/pyridine_n-oxide_tdmab_nominal.txt", skiprows = 8, sep = "\t") # pyridine_n-oxide
+df = pd.read_csv("ion-molecule_reaction_data/pyridine_n-oxide_tdmab_nominal.txt", skiprows = 8, sep = "\t") # pyridine_n-oxide
 #df = pd.read_csv("ion-molecule_reaction_data/pyridine_n-oxide_tmb_nominal.txt", skiprows = 8, sep = "\t") # pyridine_n-oxide
 #df = pd.read_csv("ion-molecule_reaction_data/pyridine_n-oxide_mop_nominal.txt", skiprows = 8, sep = "\t") # pyridine_n-oxide
 
 #### VARIABLES
 
 """ protonated analyte m/z to the decimal place as reported in the reading csv file"""
-analyte_mz = 203 # diphenyl_sulfoxide
+#analyte_mz = 203 # diphenyl_sulfoxide
 #analyte_mz = 157 # methyl_phenyl_sulfone
-#analyte_mz = 96 # pyridine_n-oxide
+analyte_mz = 96 # pyridine_n-oxide
 
 """Relative Cutoff"""
-relative_cutoff = 0.0001 # relative cutoff using . default has been set to 2
+#relative_cutoff = 0.01 # MOP relative cutoff
+#relative_cutoff = 0.0001 # TMB relative cutoff
+relative_cutoff = 0.0001 # TDMAB relative cutoff
 
 """elemental compositions"""
-elem_comp = "C12H11O1S1"
-rdbe = 7.5
+#elem_comp = "C12H11O1S1"
+#rdbe = 7.5
 
 #elem_comp = "C7H9O2S1"
 #rdbe = 3.5
 
-#elem_comp = "C5H6N1O1"
-#rdbe = 3.5
+elem_comp = "C5H6N1O1"
+rdbe = 3.5
 
 """Neutral reagent used"""
-#expert_based_dict = TDMAB # TMB, MOP, TDMAB
-expert_based_dict = TMB # TMB, MOP, TDMAB
+expert_based_dict = TDMAB # TMB, MOP, TDMAB
+#expert_based_dict = TMB # TMB, MOP, TDMAB
 #expert_based_dict = MOP # TMB, MOP, TDMAB
 
 """Neutral reagent used"""
-#ml_based_dict = TDMAB_ml
-ml_based_dict = TMB_ml
+ml_based_dict = TDMAB_ml
+#ml_based_dict = TMB_ml
 #ml_based_dict = MOP_ml
 
 ### Main code
@@ -76,11 +78,18 @@ TMB_ml = {73.04: ['tmb_frags_jpgs/1153_15.svg.jpg',
                              'tmb_frags_jpgs/470_6.svg.jpg',
                              'tmb_frags_jpgs/1477_3.svg.jpg'], #TMB adduct-Me2O
                      105.07: []} #TMB adduct
-MOP_ml = {72.06: [] #MOP adduct
+MOP_ml = {72.06: ['mop_frags_jpgs/1.jpg',
+                  'mop_frags_jpgs/4.jpg',
+                  'mop_frags_jpgs/5.jpg',
+                  'mop_frags_jpgs/6.jpg',
+                  'mop_frags_jpgs/11.jpg',] #MOP adduct
           }
 
-TDMAP_ml = {52.04: [], #TDMAB adduct-2DMA
-            98.10: []
+TDMAB_ml = {52.04: ['tdmab_frags_jpgs/14_16.svg.jpg'], #TDMAB adduct-2DMA
+            98.10: ['tdmab_frags_jpgs/1276_15.svg.jpg',
+                    'tdmab_frags_jpgs/808_15.svg.jpg',
+                    'tdmab_frags_jpgs/808_30.svg.jpg',
+                    'tdmab_frags_jpgs/1153_33.svg.jpg']
         }
                      
                      
@@ -110,7 +119,18 @@ ml_funcs_n_elemental_comps = {'tmb_frags_jpgs/1153_15.svg.jpg': ['N'],
                               'tmb_frags_jpgs/1029_19.svg.jpg': ['C'],
                               'tmb_frags_jpgs/1907_22.svg.jpg': ['O'],
                               'tmb_frags_jpgs/470_6.svg.jpg': ['S','O'],
-                              'tmb_frags_jpgs/1477_3.svg.jpg': ['S','O']                 
+                              'tmb_frags_jpgs/1477_3.svg.jpg': ['S','O'],
+                              'tdmab_frags_jpgs/14_16.svg.jpg': ['O'],
+                              'tdmab_frags_jpgs/1276_15.svg.jpg': ['O'],
+                              'tdmab_frags_jpgs/808_15.svg.jpg': [],
+                              'tdmab_frags_jpgs/808_30.svg.jpg':['O'],
+                              'tdmab_frags_jpgs/1153_33.svg.jpg': ['N'],
+                              'mop_frags_jpgs/1.jpg': ['S', 'O'],
+                              'mop_frags_jpgs/4.jpg': ['N', 'O'],
+                              'mop_frags_jpgs/5.jpg': ['N'],
+                              'mop_frags_jpgs/6.jpg': ['N', 'O'],
+                              'mop_frags_jpgs/11.jpg': ['N', 'O']
+                              
         }
 
 def dataframe_preprocess(df):
@@ -243,7 +263,9 @@ print(func_sieve_expert(elements_list_of_list,expert_based_funcs, expert_funcs_n
 #ML Based Part
 ml_based_funcs = ml_based(result_df2, 'None', ml_based_dict)
 ml_based_funcs = flattening(ml_based_funcs)
+print(ml_based_funcs)
 ml_func_list = func_sieve_ml(elements_list_of_list, ml_based_funcs, ml_funcs_n_elemental_comps)
+print(ml_func_list)
 ml_funcs_disp(ml_func_list)
 
 
