@@ -8,29 +8,84 @@ Created on Mon Oct 18 11:46:16 2021
 
 import pandas as pd
 import itertools
+from PIL import Image
 
-df = pd.read_csv("rt30ms.csv") # reading the csv file
-analyte_mz = 101.1 # protonated analyte m/z to the decimal place as reported in the reading csv file
-relative_cutoff = 2 # relative cutoff using . default has been set to 2
+"""reading csv files"""
+#df = pd.read_csv("ion-molecule_reaction_data/diphenyl_sulfoxide_mop_nominal.txt", skiprows = 8, sep = "\t") # diphenyl_sulfoxide
+df = pd.read_csv("ion-molecule_reaction_data/diphenyl_sulfoxide_tmb_nominal.txt", skiprows = 8, sep = "\t") # diphenyl_sulfoxide
+#df = pd.read_csv("ion-molecule_reaction_data/diphenyl_sulfoxide_tdmab_nominal.txt", skiprows = 8, sep = "\t") # diphenyl_sulfoxide
+
+#df = pd.read_csv("ion-molecule_reaction_data/methyl_phenyl_sulfone_tmb_nominal.txt", skiprows = 8, sep = "\t") # methyl_phenyl_sulfone
+#df = pd.read_csv("ion-molecule_reaction_data/methyl_phenyl_sulfone_mop_nominal.txt", skiprows = 8, sep = "\t") # methyl_phenyl_sulfone
+#df = pd.read_csv("ion-molecule_reaction_data/methyl_phenyl_sulfone_tdmab_nominal.txt", skiprows = 8, sep = "\t") # methyl_phenyl_sulfone
+#
+#df = pd.read_csv("ion-molecule_reaction_data/pyridine_n-oxide_tdmab_nominal.txt", skiprows = 8, sep = "\t") # pyridine_n-oxide
+#df = pd.read_csv("ion-molecule_reaction_data/pyridine_n-oxide_tmb_nominal.txt", skiprows = 8, sep = "\t") # pyridine_n-oxide
+#df = pd.read_csv("ion-molecule_reaction_data/pyridine_n-oxide_mop_nominal.txt", skiprows = 8, sep = "\t") # pyridine_n-oxide
+
+#### VARIABLES
+
+""" protonated analyte m/z to the decimal place as reported in the reading csv file"""
+analyte_mz = 203 # diphenyl_sulfoxide
+#analyte_mz = 157 # methyl_phenyl_sulfone
+#analyte_mz = 96 # pyridine_n-oxide
+
+"""Relative Cutoff"""
+relative_cutoff = 0.0001 # relative cutoff using . default has been set to 2
+
+"""elemental compositions"""
 elem_comp = "C12H11O1S1"
-rdbe = 9
+rdbe = 7.5
 
+#elem_comp = "C7H9O2S1"
+#rdbe = 3.5
 
+#elem_comp = "C5H6N1O1"
+#rdbe = 3.5
 
-expert_based_dict = {73.04: ['epoxide','sulfone','sulfoxide', 'amide', 'alcohol', 'aldehyde', 'ether', 'ketone', 'ester', 'carboxylic acid'], #TMB adduct-MeOH
+"""Neutral reagent used"""
+#expert_based_dict = TDMAB # TMB, MOP, TDMAB
+expert_based_dict = TMB # TMB, MOP, TDMAB
+#expert_based_dict = MOP # TMB, MOP, TDMAB
+
+"""Neutral reagent used"""
+#ml_based_dict = TDMAB_ml
+ml_based_dict = TMB_ml
+#ml_based_dict = MOP_ml
+
+### Main code
+
+"""Neutral reagent wise expert based dictionaries"""
+TMB = {73.04: ['epoxide','sulfone','sulfoxide', 'amide', 'alcohol', 'aldehyde', 'ether', 'ketone', 'ester', 'carboxylic acid'], #TMB adduct-MeOH
                      59.03: ['epoxide', 'sulfone'], #TMB adduct-Me2O
-                     105.07: ['sulfone'], #TMB adduct
-                     72.06: ['sulfoxide', 'N,N-disubstituted_hydroxylamine', 'aromatic_tertiary_N-oxide'], #MOP adduct
-                     52.04: ['N-oxide_with_nearby_COOH/OH/NH2', 'sulfoxide_with_nearby_COOH/OH/NH2'], #TDMAB adduct-2DMA
-                     98.10: ['N-oxide', 'sulfoxide', 'urea', 'pyridine', 'imine']} #TDMAB adduct-DMA
-ml_based_dict = {73.04: 'tmb_frags/1153_15.svg', #TMB adduct-MeOH
-                     59.03: [], #TMB adduct-Me2O
-                     105.07: [], #TMB adduct
-                     72.06: [], #MOP adduct
-                     52.04: [], #TDMAB adduct-2DMA
-                     98.10: []}
+                     105.07: ['sulfone']} #TMB adduct}
+                     
+MOP = { 72.06: ['sulfoxide', 'N,N-disubstituted_hydroxylamine', 'aromatic_tertiary_N-oxide' ]} #MOP adduct
 
-funcs_n_elemental_comps = {'sulfoxide': ['S','O'],
+TDMAB = {52.04: ['N-oxide_with_nearby_COOH/OH/NH2', 'sulfoxide_with_nearby_COOH/OH/NH2'], #TDMAB adduct-2DMA
+                     98.10: ['N-oxide', 'sulfoxide', 'urea', 'pyridine', 'imine']} #TDMAB adduct-DMA
+
+
+"""Neutral reagent wise ML based dictionaries"""
+
+TMB_ml = {73.04: ['tmb_frags_jpgs/1153_15.svg.jpg', 
+                  'tmb_frags_jpgs/651_23.svg.jpg', 
+                  'tmb_frags_jpgs/651_26.svg.jpg'], #TMB adduct-MeOH
+                     59.03: ['tmb_frags_jpgs/1029_19.svg.jpg',
+                             'tmb_frags_jpgs/1907_22.svg.jpg',
+                             'tmb_frags_jpgs/470_6.svg.jpg',
+                             'tmb_frags_jpgs/1477_3.svg.jpg'], #TMB adduct-Me2O
+                     105.07: []} #TMB adduct
+MOP_ml = {72.06: [] #MOP adduct
+          }
+
+TDMAP_ml = {52.04: [], #TDMAB adduct-2DMA
+            98.10: []
+        }
+                     
+                     
+
+expert_funcs_n_elemental_comps = {'sulfoxide': ['S','O'],
                            'N,N-disubstituted_hydroxylamine': ['N','O'], 
                            'aromatic_tertiary_N-oxide': ['N','O'],
                            'epoxide':['O'],
@@ -48,6 +103,23 @@ funcs_n_elemental_comps = {'sulfoxide': ['S','O'],
                            'urea':['N','O'], 
                            'pyridine':['N'], 
                            'imine':['N']}
+
+ml_funcs_n_elemental_comps = {'tmb_frags_jpgs/1153_15.svg.jpg': ['N'],
+                              'tmb_frags_jpgs/651_23.svg.jpg': ['O'],
+                              'tmb_frags_jpgs/651_26.svg.jpg': ['O'],
+                              'tmb_frags_jpgs/1029_19.svg.jpg': ['C'],
+                              'tmb_frags_jpgs/1907_22.svg.jpg': ['O'],
+                              'tmb_frags_jpgs/470_6.svg.jpg': ['S','O'],
+                              'tmb_frags_jpgs/1477_3.svg.jpg': ['S','O']                 
+        }
+
+def dataframe_preprocess(df):
+    df.sort_values(by=['Intensity'], ascending = False, inplace = True)
+    df_max_scaled = df.copy()
+    column = 'Intensity'
+    df_max_scaled['Relative'] = df_max_scaled[column] /df_max_scaled[column].abs().max()
+    df_max_scaled = df_max_scaled.rename(columns={"Mass": "m/z"})
+    return(df_max_scaled)
 
 def split(word):
     return list(word)
@@ -89,19 +161,18 @@ def br_calculation(df, analyte, cutoff):
     return df_dropped
 
 def mass_difference(df, analyte):
-    df['mass_difference'] = abs(df['m/z'] - analyte)
+    df['mass_difference'] = df['m/z'] - analyte # abs(df['m/z'] - analyte)
     return df
 
 def expert_based(df, nr, dictionary):
     funcs = []
     for i in df['mass_difference']:
         for key in dictionary.keys():
-            if i >= key-0.6 and i <= key+0.6:
+            if i >= key-1.03 and i <= key+1.03:
 #                print(dictionary[key])
                 funcs.append(dictionary[key])
             else:
                 continue
-            
     return funcs
 
 def func_sieve_expert(elements_lst_of_lst, predicted_func_list, func_and_elements_dict):
@@ -109,42 +180,108 @@ def func_sieve_expert(elements_lst_of_lst, predicted_func_list, func_and_element
     elements = lst_of_lst[0]
     numbers = lst_of_lst[1]
     prob_funcs = []
+    
     for i in predicted_func_list:
-        if(set(func_and_elements_dict[i]).issubset(set(elements))) and numbers[elements.index('O')] > 0 or  (set(elements).issubset(set(func_and_elements_dict[i]))) and numbers[elements.index('O')] > 0:
-            prob_funcs.append(i)
+        if(set(elements).issubset(set(func_and_elements_dict[i]))) and numbers[elements.index('O')] > 0:
+            prob_funcs.append(i) 
         else:
             continue
-        
+    prob_funcs = [i for n, i in enumerate(prob_funcs) if i not in prob_funcs[:n]]     
     return prob_funcs
 
 def ml_based(df, nr, dictionary):
+    funcs = []
+    for i in df['mass_difference']:
+        for key in dictionary.keys():
+            if i >= key-1.03 and i <= key+1.03:
+#                print(dictionary[key])
+                funcs.append(dictionary[key])
+            else:
+                continue
+    return funcs
+
+def flattening(list_of_list):
+    flat_list = list(itertools.chain(*list_of_list))
+    return flat_list
     
-    return None
+def func_sieve_ml(elements_lst_of_lst, predicted_func_list, func_and_elements_dict):
+    lst_of_lst = elements_lst_of_lst
+    elements = lst_of_lst[0]
+    numbers = lst_of_lst[1]
+    prob_funcs = []
+    
+    for i in predicted_func_list:
+        if(set(elements).issubset(set(func_and_elements_dict[i]))) and numbers[elements.index('O')] > 0:
+            prob_funcs.append(i) 
+        else:
+            continue
+    prob_funcs = [i for n, i in enumerate(prob_funcs) if i not in prob_funcs[:n]]     
+    return prob_funcs
 
+def ml_funcs_disp(lst):
+    for file in lst:
+        im = Image.open(file)
+        im.show()
 
-
-result_df = br_calculation(df, analyte_mz, relative_cutoff)
+df1 = dataframe_preprocess(df)
+#print(df1)
+result_df = br_calculation(df1, analyte_mz, relative_cutoff)
 #print(result_df)
 
 result_df2 = mass_difference(result_df, analyte_mz)
+print(result_df2)
 
-expert_based_funcs = expert_based(result_df2, 'None', expert_based_dict)
-expert_based_funcs = list(itertools.chain(*expert_based_funcs))
+##Elemental composition preprocess
 elements_list_of_list = find_elements(elem_comp)
 
-#print(expert_based_funcs)
-#print(funcs_n_elemental_comps)
-#print(elements_list_of_list)
 
-print(func_sieve_expert(elements_list_of_list,expert_based_funcs,funcs_n_elemental_comps))
+#Expert Based Part
+expert_based_funcs = expert_based(result_df2, 'None', expert_based_dict)
+expert_based_funcs = flattening(expert_based_funcs)
+print(func_sieve_expert(elements_list_of_list,expert_based_funcs, expert_funcs_n_elemental_comps))
+
+#ML Based Part
+ml_based_funcs = ml_based(result_df2, 'None', ml_based_dict)
+ml_based_funcs = flattening(ml_based_funcs)
+ml_func_list = func_sieve_ml(elements_list_of_list, ml_based_funcs, ml_funcs_n_elemental_comps)
+ml_funcs_disp(ml_func_list)
+
+
+
+###############################################################################################################################
 
 
 
 
 
+"""Full expert based dictionary"""
+#expert_based_dict = {73.04: ['epoxide','sulfone','sulfoxide', 'amide', 'alcohol', 'aldehyde', 'ether', 'ketone', 'ester', 'carboxylic acid'], #TMB adduct-MeOH
+#                     59.03: ['epoxide', 'sulfone'], #TMB adduct-Me2O
+#                     105.07: ['sulfone'], #TMB adduct
+#                     72.06: ['sulfoxide', 'N,N-disubstituted_hydroxylamine', 'aromatic_tertiary_N-oxide'], #MOP adduct
+#                     52.04: ['N-oxide_with_nearby_COOH/OH/NH2', 'sulfoxide_with_nearby_COOH/OH/NH2'], #TDMAB adduct-2DMA
+#                     98.10: ['N-oxide', 'sulfoxide', 'urea', 'pyridine', 'imine']} #TDMAB adduct-DMA
 
 
-
+# there is an additional condition here and it give more generalized results. So commented out and removed the condition below.
+    
+#def func_sieve_expert(elements_lst_of_lst, predicted_func_list, func_and_elements_dict):
+#    lst_of_lst = elements_lst_of_lst
+#    elements = lst_of_lst[0]
+#    numbers = lst_of_lst[1]
+#    prob_funcs = []
+#    
+#    for i in predicted_func_list:
+#        if(set(func_and_elements_dict[i]).issubset(set(elements))) and numbers[elements.index('O')] > 0 or  (set(elements).issubset(set(func_and_elements_dict[i]))) and numbers[elements.index('O')] > 0:
+#            prob_funcs.append(i)
+#            print(i)
+#            print(func_and_elements_dict[i])
+#            print(elements)
+#            print('done')   
+#        else:
+#            continue
+#    prob_funcs = [i for n, i in enumerate(prob_funcs) if i not in prob_funcs[:n]]     
+#    return prob_funcs
 
 
 

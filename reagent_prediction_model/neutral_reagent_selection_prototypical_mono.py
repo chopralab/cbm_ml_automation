@@ -23,9 +23,9 @@ from __future__ import print_function
 ## C6H15N1O0, rdbe = 0
 ## C6H8N1O0, rdbe = 4
 
-elemental_composition = 'C12H11O1S1' #'C4H7O2N1' #sys.argv[1]
+elemental_composition = 'C12H11N1O1' #'C4H7O2N1' #sys.argv[1]
 #elemental_composition = input('Input elemental composition (eg: C6H8N2O0; include Oxygen as zero if not present): ') # user = 'foobar12345'
-rdbe = 9 # int(input('RDBE: '))
+rdbe = 4 # int(input('RDBE: '))
 
 print('Elemental Composition: ',elemental_composition), print('RDBE: ', rdbe)
 print('\n')
