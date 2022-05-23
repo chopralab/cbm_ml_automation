@@ -1,0 +1,19 @@
+library(ggplot2)
+
+df <- read.csv("training_smiles.csv", header = FALSE, sep = ",")
+
+ggplot(df, aes(V2, fill = V2)) + 
+  # geom_histogram(aes(y = ..count..), position = 'identity', binwidth = 0.1,col="grey72", fill="grey72" )+
+  geom_histogram(aes(y = ..count..), position = 'identity', binwidth = 0.01, col="black", fill="black")+
+  labs(title="Distribution of diagnostic product branching ratios", 
+       x="Diagnostic product branching ratio with TMB", y="Count")+
+  scale_x_continuous(breaks=c(0,0.05,0.10, 0.15, 0.25, 0.5, 0.75, 1.00),
+                     labels=c("0%","5%", "10%","15%","25%","50%", "75%", "100%"))+
+  theme_bw()+
+  theme(axis.text.x=element_text(size=rel(1.5)))+
+  theme(axis.text.y=element_text(size=rel(1.5)))+
+  theme(axis.title.x=element_text(size=rel(1.5)))+
+  theme(axis.title.y=element_text(size=rel(1.5)))+
+  theme(plot.title = element_text(size=rel(2)))
+
+  

@@ -1,0 +1,5 @@
+﻿CS(C1=CC=CC=C1)(=O)=O.[H+].COB(OC)OC>>C[S+](C1=CC=CC=C1)(OB(OC)OC)=O.C[S+](C1=CC=CC=C1)(O[B-]([O+]([H])C)(OC)OC)=O.C[S+](C1=CC=CC=C1)(OB(OC)O[H])=O,0.1
+O=S(C1=CC=CC=C1)C2=CC=CC=C2.[H+].COB(OC)OC>>COB(OC)O[S+](C1=CC=CC=C1)C2=CC=CC=C2,0
+C=CC1OC1.[H+].COB(OC)OC>>[H]O[CH+]/C=C/CB(OC)OC.COB(O[H])C[CH+]/C=C/O[H],0.1
+ON([H])C1=CC=CC=C1.[H+].COB(OC)OC>>CO[B-]([N+](O)([H])C1=CC=CC=C1)(OC)[O+]([H])C,0
+[O-][N+]1=CC=CC=C1.[H+].COB(OC)OC>>,0

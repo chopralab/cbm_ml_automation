@@ -23,9 +23,9 @@ from __future__ import print_function
 ## C6H15N1O0, rdbe = 0
 ## C6H8N1O0, rdbe = 4
 
-elemental_composition = 'C12H11N1O1' #'C4H7O2N1' #sys.argv[1]
+elemental_composition = 'C12H11O1S1' #'C4H7O2N1' #sys.argv[1]
 #elemental_composition = input('Input elemental composition (eg: C6H8N2O0; include Oxygen as zero if not present): ') # user = 'foobar12345'
-rdbe = 4 # int(input('RDBE: '))
+rdbe = 4.5 # int(input('RDBE: '))
 
 print('Elemental Composition: ',elemental_composition), print('RDBE: ', rdbe)
 print('\n')
@@ -95,7 +95,7 @@ def find_reagents_ml_based(lst_of_lst):
 
     reagents = ['TMB', 'TDMAB','MOP']
   
-    if (('S' in elements and numbers[elements.index('S')] == 1) and ('O' in elements and numbers[elements.index('O')] >= 1) and rdbe >= 1.5) or (('N' in elements and numbers[elements.index('N')] == 1) and ('O' in elements and numbers[elements.index('O')] == 1) and rdbe >= 0 and rdbe < 4) or (('O' in elements and numbers[elements.index('O')] >= 1) and rdbe >= 2 and rdbe < 4):
+    if (('S' in elements and numbers[elements.index('S')] == 1) and ('O' in elements and numbers[elements.index('O')] >= 1) and rdbe >= 1.5) or (('N' in elements and numbers[elements.index('N')] == 1) and ('O' in elements and numbers[elements.index('O')] == 1) and rdbe >= 0 and rdbe < 3.5) or (('O' in elements and numbers[elements.index('O')] >= 1) and rdbe >= 2 and rdbe < 3.5):
         reagent = reagents[0]
         reagents_ml.append(reagent)
 #        print('\n',reagent, '\n')  
@@ -127,8 +127,8 @@ elements_list_of_list = find_elements(elemental_composition)
 expert = find_reagents_expert(elements_list_of_list)
 ml = find_reagents_ml_based(elements_list_of_list)
 
-#print(expert)
-#print(ml)
+print("expert: ", expert)
+print("ml: ",ml)
 
 list1_as_set = set(expert)
 
