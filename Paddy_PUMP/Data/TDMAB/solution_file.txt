@@ -1,0 +1,1 @@
+Pumping-Out Time: 3.0 seconds, Pulsing Time: 170 micro-seconds, Resolution: 2.4553761703317822
