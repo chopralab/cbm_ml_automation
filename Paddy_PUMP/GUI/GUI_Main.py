@@ -116,22 +116,31 @@ class Wizard(tk.Tk):
         Note that the csv_file does not need to be in the working directory.
 
         """
-        csv_file = filedialog.askopenfilename(title='Select CSV for Paddy')#this is a full path
+        csv_file = filedialog.askopenfilename(title='Select CSV for Paddy',filetypes=[("csv",".csv")])#this is a full path
+        if csv_file == "":
+            return
         pp = subprocess.run(["python",resource_path("Iterate.py"),
                              "-x",f"{self.working_dir}","-y",csv_file,"-z",
-                             str(self.paddy_iteration),"-v",str(self.fval.get()[-1])])
-        self.paddy_iteration += 1
-        complete_dumby = open(self.working_dir+"complete_var","r")
-        cont_var = complete_dumby.readline()
-        complete_dumby.close()
-        if cont_var == 'not done':
-            print('log file worked')
+                             str(self.paddy_iteration),"-v",str(self.fval.get()[-1])],
+                             text=False)
+        print(pp.returncode)
+        if pp.returncode == 0:
+            self.paddy_iteration += 1
+            complete_dumby = open(self.working_dir+"complete_var","r")
+            cont_var = complete_dumby.readline()
+            complete_dumby.close()
+            if cont_var == 'not done':
+                print('log file worked')
+            else:
+                self.text_box['text']="Paddy complete!\nCheck for results."
+                self.done_window = tk.Toplevel(self)
+                self.done_label = tk.Label(self.done_window, text="\nOptimization complete, check working directory.\n\n\nFile name:'solution_file'\n")
+                self.done_label.pack()
+            #task function for paddy
         else:
-            self.text_box['text']="Paddy complete!\nCheck for results."
-            self.done_window = tk.Toplevel(self)
-            self.done_label = tk.Label(self.done_window, text="\nOptimization complete, check working directory.\n\n\nFile name:'solution_file'\n")
-            self.done_label.pack()
-        #task function for paddy
+            tk.messagebox.showwarning("Parsing Error",
+                                      "Chromatogram could not be processed.\n Check to see if the correct file was selected.",
+                                      icon="warning")
         
     def make_folder(self):
         self.make_dir = True
@@ -147,6 +156,9 @@ class Wizard(tk.Tk):
             self.make_dir = False
         if self.make_dir:
             self.dir_path = filedialog.askdirectory(title='Select folder to save results')
+            print(self.dir_path)
+            if self.dir_path == "":
+                return
             self.savedir = self.entry_box.get()
             print(self.savedir)
             print(self.dir_path)
@@ -181,6 +193,9 @@ class Wizard(tk.Tk):
                                                           filetypes=[("pickle",".pickle")])
                                                           #only allows selection of pickles
             print(self.pickle_path)
+            print(type(self.pickle_path))
+            if self.pickle_path == "":
+                return
             temp = self.pickle_path.split(".")[-2].split("_")
             print(temp)
             temp2 = ""
@@ -190,14 +205,14 @@ class Wizard(tk.Tk):
             else:
                 self.paddy_iteration = int(temp[-2])
                 self.working_dir = self.pickle_path.split(f"iteration_{self.paddy_iteration}_")[0]
-            #note that the above is not bug proof
+            #note that the above is not bug proof if the user names things like a silly person
             if self.working_dir != None:
                 self.exl_but.configure(state="normal")
                 self.convert_button.configure(state="normal")
                 self.entry_box.configure(state="disabled")
                 self.fmen.configure(state="disabled")
                 self.wkdir_button.configure(state="disabled")
-                self.text_box['text']="Run HPLC-MS experiment\nwith recipe\n and process export file"
+                self.text_box['text'] = "Run HPLC-MS experiment\nwith recipe\n and process export file"
                 complete_dumby = open(self.working_dir+'complete_var','w+')
                 complete_dumby.write('not done')
                 complete_dumby.close()
@@ -206,6 +221,8 @@ class Wizard(tk.Tk):
         #this function makes a csv file from an exported .txt chromatogram
         txt_file = filedialog.askopenfilename(title="Select .txt file",
                                               filetypes=[("txt",".txt")])
+        if txt_file == "":
+                return
         temp = txt_file.split("/")
         if len(temp[-1].split(".")) > 1:#if theres a file extension
             csv_file = temp[-1].split(".")[0]+".csv"
