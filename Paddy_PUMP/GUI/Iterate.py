@@ -7,35 +7,21 @@ was processed correctly
 
 import paddy
 from optparse import OptionParser
-import os
-from os import name, set_inheritable
-from numpy.lib.function_base import percentile
 import pandas as pd
-import csv
 
-from pandas.core.base import DataError
-from pandas.core.frame import DataFrame
 
 import numpy as np
-from scipy.signal import find_peaks
-from scipy.optimize import curve_fit
+from scipy.signal import find_peaks 
 from scipy.signal import peak_widths
-from scipy.signal.ltisys import dfreqresp
-from sklearn import preprocessing
 from sklearn import mixture
-from scipy import interpolate
 
-import statistics
-import re
 
 from optparse import OptionParser
 import matplotlib.pyplot as plt
 
 import itertools
 
-from scipy import linalg
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 
 parser = OptionParser()
 parser.add_option("-x", dest="path_var")
@@ -365,4 +351,5 @@ else:
     solution_file.close()
     complete_dumby = open(path_var+'complete_var','w+')#file just for seeing if the optimizagtion is over
     complete_dumby.write('done')
+
     complete_dumby.close()
