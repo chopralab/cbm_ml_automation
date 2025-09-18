@@ -8,7 +8,7 @@ All software needed to run Paddy-PUMP can be found in the `GUI` directory.  The 
 python GUI_Main.py
 ```
 # Usage
-Write this section out....
+To simulate usage of Paddy-PUMP, one should first select a channel and then click the 'Recover Pump-Pulse' button.  From there, the user will be prompted to select a Paddy pickle file, which can be found in the `Data` subdirectories (i.e. `Data/MOP/iteration_0.pickle`).  One should then click 'Process MS Data' and then select the associated csv file (i.e. `Data/MOP/iteration_0.csv`).
    
 # Requirements
 The following packages should be installed to use Paddy-PUMP:
