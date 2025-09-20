@@ -1,4 +1,4 @@
-name: rdkit_env
+name: cbm_env
 channels:
   - defaults
   - conda-forge
@@ -145,4 +145,3 @@ dependencies:
       - sympy==1.14.0
       - threadpoolctl==3.6.0
       - torch==2.8.0
-prefix: /Users/prageethwijewardhane/miniconda3/envs/rdkit_env
