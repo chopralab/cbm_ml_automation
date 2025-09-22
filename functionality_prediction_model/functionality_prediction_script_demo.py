@@ -22,15 +22,6 @@ analyte_mz = 203 # diphenyl_sulfoxide
 elem_comp = "C12H11O1S1"
 rdbe = 7.5
 
-"""Neutral reagent used"""
-expert_based_dict = MOP # TMB, MOP, TDMAB
-ml_based_dict = MOP_ml
-
-"""Relative Cutoff"""
-relative_cutoff = 0.01 # MOP relative cutoff
-
-### Main code
-
 """Neutral reagent wise expert based dictionaries"""
 TMB = {73.04: ['epoxide','sulfone','sulfoxide', 'amide', 'alcohol', 'aldehyde', 'ether', 'ketone', 'ester', 'carboxylic acid'], #TMB adduct-MeOH
                      59.03: ['epoxide', 'sulfone'], #TMB adduct-Me2O
@@ -67,7 +58,17 @@ TDMAB_ml = {52.04: ['tdmab_frags_jpgs/14_16.svg.jpg'], #TDMAB adduct-2DMA
                     'tdmab_frags_jpgs/1153_33.svg.jpg']
         }
                      
-                     
+
+"""Neutral reagent used"""
+expert_based_dict = MOP # TMB, MOP, TDMAB
+ml_based_dict = MOP_ml
+
+"""Relative Cutoff"""
+relative_cutoff = 0.01 # MOP relative cutoff
+
+### Main code
+
+
 
 expert_funcs_n_elemental_comps = {'sulfoxide': ['S','O'],
                            'N,N-disubstituted_hydroxylamine': ['N','O'], 

@@ -45,17 +45,6 @@ rdbe = 7.5
 #elem_comp = "C5H6N1O1"
 #rdbe = 3.5
 
-"""Neutral reagent used"""
-#expert_based_dict = TDMAB # TMB, MOP, TDMAB
-#expert_based_dict = TMB # TMB, MOP, TDMAB
-expert_based_dict = MOP # TMB, MOP, TDMAB
-
-"""Neutral reagent used"""
-#ml_based_dict = TDMAB_ml
-#ml_based_dict = TMB_ml
-ml_based_dict = MOP_ml
-
-### Main code
 
 """Neutral reagent wise expert based dictionaries"""
 TMB = {73.04: ['epoxide','sulfone','sulfoxide', 'amide', 'alcohol', 'aldehyde', 'ether', 'ketone', 'ester', 'carboxylic acid'], #TMB adduct-MeOH
@@ -134,6 +123,20 @@ ml_funcs_n_elemental_comps = {'tmb_frags_jpgs/1153_15.svg.jpg': ['N'],
                               'mop_frags_jpgs/11.jpg': ['N', 'O']
                               
         }
+
+
+
+"""Neutral reagent used"""
+#expert_based_dict = TDMAB # TMB, MOP, TDMAB
+#expert_based_dict = TMB # TMB, MOP, TDMAB
+expert_based_dict = MOP # TMB, MOP, TDMAB
+
+"""Neutral reagent used"""
+#ml_based_dict = TDMAB_ml
+#ml_based_dict = TMB_ml
+ml_based_dict = MOP_ml
+
+### Main code
 
 def dataframe_preprocess(df):
     df.sort_values(by=['Intensity'], ascending = False, inplace = True)
