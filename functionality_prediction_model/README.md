@@ -25,7 +25,6 @@ First the results are printed:
 324  374      15714  0.011027          0.973222              171
 ```
 
-Then the predicted functional groups are then displayed
+The predicted functional groups are then displayed:
 
-<img src="https://github.com/chopralab/cbm_ml_automation/blob/main/Paddy_PUMP/functionality_prediction_model/mop_frags_jpgs/1.jpg"> 
-<img src="https://github.com/chopralab/cbm_ml_automation/blob/main/Paddy_PUMP/functionality_prediction_model/mop_frags_jpgs/9.jpg">
+![image](https://github.com/chopralab/cbm_ml_automation/blob/main/functionality_prediction_model/mop_frags_jpgs/1.jpg) ![image](https://github.com/chopralab/cbm_ml_automation/blob/main/functionality_prediction_model/mop_frags_jpgs/9.jpg)
