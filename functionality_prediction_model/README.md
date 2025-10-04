@@ -1,30 +1,95 @@
-# Functionality Prediction Model
+# Ion–Molecule Reaction Analyzer — README
 
-The functionality prediction model demo for diphenyl sulfoxide and MOP can be run with the command:
-```
-> python functionality_prediction_script_demo.py
-```
+## Script
+**`functionality_prediction_script_demo.py`**
 
-First the results are printed:
-```
-     m/z  Intensity  Relative  Branching_ratios  mass_difference
-283  333     693821  0.486891         42.970738              130
-282  332     394405  0.276775         24.426868              129
-284  334      97659  0.068533          6.048360              131
-152  202      94141  0.066064          5.830478               -1
-225  275      65745  0.046137          4.071816               72
-281  331      64059  0.044954          3.967396              128
-154  204      45883  0.032199          2.841693                1
-198  248      30815  0.021625          1.908480               45
-299  349      21495  0.015084          1.331260              146
-197  247      20618  0.014469          1.276944               44
-224  274      19410  0.013621          1.202129               71
-325  375      18015  0.012642          1.115731              172
-356  406      16675  0.011702          1.032741              203
-136  186      16181  0.011355          1.002145              -17
-324  374      15714  0.011027          0.973222              171
+## Overview
+This script reads a TXT/TSV spectrum table, computes **relative intensities**, filters peaks by a **relative cutoff**, calculates **branching ratios** and **mass differences** from a given analyte m/z, and proposes likely **functional groups** via:
+- an **expert‑curated** mass‑shift dictionary, and
+- an **ML‑based** fragment→functional‑group mapping (optionally displaying fragment images).
+
+The processed peak table and predicted functions print to stdout; ML fragment images open in your OS image viewer.
+
+---
+
+## Requirements
+- Python ≥ 3.8  
+- Packages: `pandas`, `Pillow`
+```bash
+pip install pandas pillow
 ```
 
-The predicted functional groups are then displayed:
+---
 
-![image](https://github.com/chopralab/cbm_ml_automation/blob/main/functionality_prediction_model/mop_frags_jpgs/1.jpg) ![image](https://github.com/chopralab/cbm_ml_automation/blob/main/functionality_prediction_model/mop_frags_jpgs/9.jpg)
+## Input
+A tabular text file with at least:
+- **Mass** — m/z values
+- **Intensity** — peak intensities
+
+**Default input path**
+```
+ion-molecule_reaction_data/diphenyl_sulfoxide_mop_nominal.txt
+```
+
+---
+
+## Key Parameters (in‑script defaults)
+- `analyte_mz` (float): protonated analyte m/z (default: `203`)
+- `elem_comp` (str): elemental composition, e.g. `"C12H11O1S1"`
+- `relative_cutoff` (float): min relative intensity to keep (default: `0.01`)
+- `expert_based_dict`, `ml_based_dict`: choose one of `TMB`, `MOP`, `TDMAB` (and matching `*_ml`)
+
+---
+
+## Usage
+```bash
+# default file and settings
+python functionality_prediction_script_demo.py
+
+# custom file
+python functionality_prediction_script_demo.py -i path/to/data.txt
+
+# custom header rows and separator
+python functionality_prediction_script_demo.py -i data.csv --skiprows 10 --sep ","
+```
+
+**CLI Arguments**
+- `-i, --input` — path to input file (default shown above)
+- `--skiprows` — number of header rows to skip (default: `8`)
+- `--sep` — column separator (default: tab `\t`)
+
+---
+
+## What it does
+1. **Load & preprocess**
+   - Sort by `Intensity`
+   - `Relative = Intensity / max(Intensity)`
+   - Rename `Mass → m/z`
+2. **Filter peaks**
+   - Keep `Relative ≥ relative_cutoff`
+   - Drop analyte peak (`m/z == analyte_mz`)
+3. **Metrics**
+   - `Branching_ratios` (% of remaining total relative intensity)
+   - `mass_difference = m/z − analyte_mz`
+4. **Suggest functional groups**
+   - **Expert**: mass‑shift lookup + elemental sieve
+   - **ML**: fragment→function mapping; optionally display fragment images
+
+---
+
+## Output
+- Printed table with `m/z`, `Relative`, `Branching_ratios`, `mass_difference`
+- Printed list of expert‑based suggested functions
+- ML fragment images displayed (if available)
+
+> Save output table:
+```bash
+python functionality_prediction_script_demo.py -i data.txt > results.txt
+```
+
+---
+
+## Notes
+- Image display depends on your OS default viewer (`Pillow`).
+- Ensure fragment/image folders exist relative to your run dir (e.g., `mop_frags_jpgs/`, `tmb_frags_jpgs/`, `tdmab_frags_jpgs/`).
+- Switch reagent dictionaries by setting `expert_based_dict` / `ml_based_dict` to `TMB`/`TDMAB` variants as needed.
