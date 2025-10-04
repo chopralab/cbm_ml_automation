@@ -1,4 +1,4 @@
-# Decision Tree Models – Minimal README
+# Decision Tree Models – README
 
 This repo contains small, reproducible pipelines (Julia + optional Python helpers) to train decision‑tree–style models on molecular fingerprints and generate reagent **hit / no‑hit** predictions with bootstrap validation.
 
