@@ -8,7 +8,7 @@ A Conda enviornment is provided for reagent selection and ion–molecule reactio
 
 This can be installed using the command:
 ```
-> conda env create -f environment.yml -n cbm_en
+> conda env create -f environment.yml -n cbm_env
 ```
 
 A new Conda enviornment is provided for with removing system-specific dependencies (`enviornment2.yml`).
