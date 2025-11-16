@@ -8,7 +8,19 @@ A Conda enviornment is provided for reagent selection and ion–molecule reactio
 
 This can be installed using the command:
 ```
-> conda env create -f environment.yml
+> conda env create -f environment.yml -n cbm_en
+```
+
+A new Conda enviornment is provided for with removing system-specific dependencies (`enviornment2.yml`).
+This can be installed using the command:
+```
+> conda env create -f environment2.yml -n cbm_env2
+```
+
+If using this envrionment leads to an error. Please do the following:
+```
+> conda remove pillow
+> conda install -c conda-forge "pillow>=9.4" "libtiff>=4.5,<5"
 ```
 
 A seperate list of requirements are described in the `Paddy_PUMP` directory, in addition to a brief workflow description.
