@@ -9,11 +9,11 @@ To automate ion–molecule reactions in a mass spectrometer, we have intoduced m
 The decision-tree models for TMB and TDMAB are implemented in Julia.  
 To reproduce the decision-tree training, bootstrapping, and prediction scripts, follow the steps below.
 
-### 1. Install Julia
+1. Install Julia
 Please follow instructions at
 https://julialang.org/downloads/
 
-### 2. Launch Julia in the working directory
+2. Launch Julia in the working directory
 
 ```
 Julia
@@ -27,6 +27,7 @@ Pkg.add(name="DecisionTree", version="0.10.10")
 Pkg.add(["CSV", "DataFrames", "Random"])
 ```
 
+## Conda environment setup
 A Conda enviornment is provided for reagent selection and ion–molecule reaction interpretation modules (`enviornment.yml`).
 
 This can be installed using the command:
